@@ -1,9 +1,12 @@
 var pic = document.getElementById("vimage");
 var clr = document.getElementById("clear");
 var xpn = document.getElementById("grow");
+var cse = document.getElementById("cease");
 
 var lastX = -1;
 var lastY;
+
+var intervalID;
 
 var shape = function(event) {
   var c = document.createElementNS("http://www.w3.org/2000/svg",
@@ -41,16 +44,21 @@ var drawline = function( x, y, event ) {
 };
 
 var clear = function() {
+  stop();
   while(pic.childNodes.length > 0)
     pic.removeChild(pic.childNodes[0]);
   lastX = -1;
+};
+
+var stop = function() {
+  window.clearInterval(intervalID);
 };
 
 var resize = function(){
   var rad = 50;
   var growth = true;
   var thing = function(){
-    while (pic.childNodes.length > 0)
+    while(pic.childNodes.length > 0)
       pic.removeChild(pic.childNodes[0]);
     var c = document.createElementNS("http://www.w3.org/2000/svg",
    "circle");
@@ -65,11 +73,13 @@ var resize = function(){
     if (growth) rad++;
     else rad--;
   };
-  var intervalID = window.setInterval( thing, 16 );
+  intervalID = window.setInterval( thing, 16 );
 };
 
+cse.addEventListener("mousedown", stop);
 clr.addEventListener("mousedown", clear);
 pic.addEventListener("mousedown", shape);
+xpn.addEventListener("mousedown", clear);
 xpn.addEventListener("mousedown", resize);
 
 //html tags
